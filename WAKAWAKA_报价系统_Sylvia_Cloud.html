@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WakaWaka 报价系统 — Cloud</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f4f8;--card:#fff;--bd:#dfe3ec;--bdL:#eef0f5;--pri:#2d5be3;--priL:#e8eeff;--tx:#151929;--sc:#555d7a;--mu:#9aa1b9;--gn:#12a466;--gnB:#e6f9f0;--rd:#d93645;--rdB:#fdeef0;--am:#cf8a00;--amB:#fef6e0;--pu:#7446d6;--puB:#f1ecfd;--cy:#0882a1;--cyB:#e5f6fb;--radius:12px}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:14px;line-height:1.5}button,input,select,textarea{font-family:inherit}
+.hdr{background:var(--card);border-bottom:1px solid var(--bd);padding:12px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 1px 6px rgba(45,91,227,.06)}
+.logo{display:flex;align-items:center;gap:11px}.li{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#2d5be3,#7446d6);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;box-shadow:0 3px 10px rgba(45,91,227,.3)}
+.nav{display:flex;gap:2px;background:var(--bg);border-radius:10px;padding:3px;flex-wrap:wrap}.nav button{padding:7px 15px;border-radius:8px;border:none;cursor:pointer;font-size:12.5px;font-weight:500;background:transparent;color:var(--sc);white-space:nowrap}.nav button.on{background:var(--pri);color:#fff;font-weight:600}
+.mn{padding:18px 22px;max-width:1500px;margin:0 auto}
+.cd{background:var(--card);border:1px solid var(--bd);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.st{font-size:17px;font-weight:700;margin-bottom:14px}.ct{font-size:14px;font-weight:700;margin-bottom:12px}
+table{width:100%;border-collapse:separate;border-spacing:0}th{padding:9px 10px;text-align:left;font-weight:600;color:var(--sc);border-bottom:2px solid var(--bd);font-size:11px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;background:#fafafd}td{padding:7px 10px;border-bottom:1px solid var(--bdL);font-size:13px;white-space:nowrap}
+.ip{padding:7px 10px;border-radius:8px;border:1.5px solid var(--bd);background:#fafbfe;color:var(--tx);font-size:13px;outline:none;width:100%;box-sizing:border-box}.ip:focus{border-color:var(--pri)}.ig{border-color:#a7f3d0;background:#f0fdf8}.iy{border-color:#fde68a;background:#fffdf5}
+.ta{padding:7px 10px;border-radius:8px;border:1.5px solid var(--bd);background:#fafbfe;color:var(--tx);font-size:13px;outline:none;width:100%;box-sizing:border-box;resize:vertical;min-height:34px;font-family:inherit}.ta:focus{border-color:var(--pri)}
+.sl{padding:8px 12px;border-radius:8px;border:1.5px solid var(--bd);background:#fff;color:var(--tx);font-size:13px;cursor:pointer;outline:none}
+.bt{padding:8px 18px;border-radius:8px;border:none;font-weight:600;font-size:13px;cursor:pointer}.bp{background:var(--pri);color:#fff;box-shadow:0 2px 8px rgba(45,91,227,.25)}.bg{background:transparent;border:1.5px dashed var(--bd);color:var(--sc)}.bd{background:var(--rd);color:#fff}.bs{padding:5px 12px;font-size:12px}
+.pl{padding:6px 14px;border-radius:8px;border:1.5px solid var(--bd);cursor:pointer;font-size:13px;font-weight:400;background:#fff;color:var(--sc)}.pl.on{border-color:var(--pri);background:var(--priL);color:var(--pri);font-weight:600}
+.ba{display:inline-block;padding:2px 9px;border-radius:6px;font-size:11px;font-weight:600}
+.lb{font-size:11px;color:var(--mu);margin-bottom:3px;font-weight:500}
+.db{background:none;border:none;cursor:pointer;color:var(--rd);font-size:16px;padding:0;line-height:1;opacity:.6}.db:hover{opacity:1}
+.sx{overflow-x:auto}.g{display:grid;gap:10px}.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}.g3{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}.g4{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}.g5{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.g6{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.sc{text-align:center;padding:14px}.sv{font-size:22px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sl2{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.6px;margin-top:3px}
+.ch{position:relative;height:300px;width:100%}.chs{height:180px}
+.hl{border:2px solid var(--pri);background:linear-gradient(135deg,#e8eeff,#f1ecfd)}
+.ar{padding:14px;border-radius:10px;border:1.5px solid transparent}
+.tc{display:none}.tc.on{display:block}
+.rh{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;cursor:pointer}
+.rb{padding:0 18px 18px;border-top:1px solid var(--bdL)}
+.rs{font-size:13px;font-weight:700;color:var(--pri);margin:14px 0 10px}
+.supabase-info{position:fixed;bottom:20px;left:20px;background:#fff;border:1.5px solid var(--bd);border-radius:12px;padding:14px 18px;box-shadow:0 4px 20px rgba(0,0,0,.10);z-index:900;max-width:340px;font-size:12px;color:var(--sc);display:none}
+.supabase-info.show{display:block}
+.supabase-info .sbi-title{font-weight:700;color:var(--tx);margin-bottom:8px;font-size:13px}
+.supabase-info .sbi-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.supabase-info .sbi-val{font-family:monospace;font-size:11px;background:#f2f4f8;padding:3px 8px;border-radius:5px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.supabase-info .sbi-copy{background:var(--pri);color:#fff;border:none;border-radius:6px;padding:3px 10px;font-size:11px;cursor:pointer;flex-shrink:0}
+.sync-bar{background:#fff;border-bottom:1px solid var(--bd);padding:7px 22px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--sc);gap:10px;flex-wrap:wrap}
+.sync-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px;flex-shrink:0}
+.setup-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center}
+.setup-box{background:#fff;border-radius:16px;padding:32px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.toast{position:fixed;bottom:20px;right:20px;background:#12a466;color:#fff;padding:10px 20px;border-radius:10px;font-weight:600;font-size:13px;box-shadow:0 4px 16px rgba(0,0,0,.15);z-index:999;opacity:0;transition:opacity .3s;pointer-events:none}.toast.show{opacity:1}
+@media(max-width:768px){.hdr{padding:10px 14px}.mn{padding:14px}.nav button{padding:6px 10px;font-size:11px}.g4,.g5{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<!-- Setup overlay -->
+<div id="setupOv" class="setup-ov" style="display:none">
+  <div class="setup-box">
+    <div style="font-size:20px;font-weight:700;margin-bottom:6px">☁️ 连接云端数据库</div>
+    <div style="font-size:13px;color:var(--sc);margin-bottom:20px;line-height:1.7">配置 Supabase 后所有人共享同一份数据。<br>暂不配置可点「跳过」先使用本地模式。</div>
+    <div style="margin-bottom:12px"><div class="lb">Project URL</div><input id="cfgUrl" class="ip" placeholder="https://xxxxx.supabase.co" value="https://ggdbmsykmxrovoldabsi.supabase.co"></div>
+    <div style="margin-bottom:20px"><div class="lb">Anon Public Key</div><input id="cfgKey" class="ip" placeholder="eyJhbGciOi..." value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnZGJtc3lrbXhyb3ZvbGRhYnNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2ODM5NTgsImV4cCI6MjA5MjI1OTk1OH0.m322GQJegt35lLIt09mweliefkEFiyQd4YX1xgSgn9s"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="bt bp" onclick="doConnect()">✅ 连接数据库</button>
+      <button class="bt bg" onclick="skipSetup()">跳过，本地模式</button>
+    </div>
+    <div id="cfgErr" style="color:var(--rd);font-size:12px;margin-top:10px;display:none"></div>
+  </div>
+</div>
+
+<!-- Sync status bar -->
+<div class="sync-bar" id="syncBar">
+  <div style="display:flex;align-items:center"><span class="sync-dot" id="syncDot" style="background:var(--mu)"></span><span id="syncTxt">初始化中...</span></div>
+  <div style="display:flex;gap:6px">
+    <button class="bt bs bg" onclick="document.getElementById('setupOv').style.display='flex'">⚙️ 数据库设置</button>
+    <button class="bt bs bg" onclick="syncNow()">🔄 立即同步</button>
+  </div>
+</div>
+
+<div class="hdr"><div class="logo"><div class="li">W</div><div><div style="font-size:18px;font-weight:700;letter-spacing:-.3px">WakaWaka 报价系统</div><div style="font-size:10px;color:var(--mu)">Cross-Border Freight Quotation System</div></div></div><nav class="nav" id="nv"></nav></div>
+<main class="mn"><div id="t-quote" class="tc on"></div><div id="t-record" class="tc"></div><div id="t-trend" class="tc"></div><div id="t-abnormal" class="tc"></div><div id="t-detention" class="tc"></div><div id="t-vehicle" class="tc"></div></main>
+<div id="toast" class="toast"></div>
+<script>
+const MS=[];for(let y=2024;y<=2027;y++)for(let m=1;m<=12;m++)MS.push(y+'-'+String(m).padStart(2,'0'));
+const CS=[{id:'zambia',l:'🇿🇲 Zambia 赞比亚'},{id:'drc',l:'🇨🇩 DRC 刚果金'},{id:'malawi',l:'🇲🇼 Malawi 马拉维'}];
+const TB=[{id:'quote',l:'📊 报价总览'},{id:'record',l:'📋 报价记录'},{id:'trend',l:'📈 趋势分析'},{id:'abnormal',l:'🚛 超限规则'},{id:'detention',l:'📦 滞箱费'},{id:'vehicle',l:'🚚 车辆规格'}];
+const STS=[{v:'draft',l:'📝 Draft 草稿',c:'#9ca3af'},{v:'submitted',l:'📤 Submitted 已提交',c:'#3b82f6'},{v:'negotiating',l:'🤝 Negotiating 谈价中',c:'#f59e0b'},{v:'won',l:'✅ Won 成交',c:'#22c55e'},{v:'lost',l:'❌ Lost 未成交',c:'#ef4444'}];
+const LR=['价格偏高','时效不满足','客户内部原因','竞对更低','货物取消','其他'];
+const IC=['微信','邮件','电话','WhatsApp','线下拜访','展会','其他'];
+const CC=['#2d5be3','#d93645','#12a466','#cf8a00','#7446d6','#0882a1','#ea580c','#ec4899','#6366f1','#14b8a6','#f43f5e','#a855f7'];
+const DL=[{n:'PIL',a:'PIL Tanzania','20GP':'10/15/30','40GP':'20/30/60','20RF':'40/40/40','40RF':'80/80/80','20OT':'10/15/30','40OT':'20/30/60','20FR':'10/15/30','40FR':'20/30/60',f:'Normal 14/30/40/55|Reefer 7/25/25/35'},{n:'HAPAG-LLOYD',a:'Hapag-Lloyd TZ','20GP':'10/15/30','40GP':'20/30/60','20RF':'75/125/225','40RF':'125/250/375','20OT':'10/15/30','40OT':'20/30/60','20FR':'10/15/30','40FR':'20/30/60',f:'Normal 14/30/40/55|Reefer 7/14/14/14'},{n:'GOLD STAR',a:'Diamond Shipping','20GP':'10/15/30','40GP':'20/30/60','20RF':'40/70/100','40RF':'80/140/160','20OT':'10/15/30','40OT':'20/30/60','20FR':'10/15/30','40FR':'20/30/60',f:'Normal 14/30/40/55|Reefer 7/25/25/35'},{n:'EMIRATES',a:'Blue Funnel TZ','20GP':'10/15/30','40GP':'20/30/60','20RF':'—','40RF':'—','20OT':'10/15/30','40OT':'20/30/60','20FR':'10/15/30','40FR':'20/30/60',f:'Normal 14/30/40/55'},{n:'MAERSK',a:'Nyota TZ','20GP':'10/15/30','40GP':'20/30/60','20RF':'40/70/110','40RF':'80/140/160','20OT':'20/30/50','40OT':'40/70/110','20FR':'20/30/50','40FR':'40/70/110',f:'Normal 14/30/40/55|Reefer 7/21/21/21'},{n:'COSCO/OOCL',a:'SINOTASHIP','20GP':'10/15/30','40GP':'20/30/60','20RF':'75/100/100','40RF':'150/250/250','20OT':'20/30/50','40OT':'40/70/100','20FR':'20/30/50','40FR':'40/70/100',f:'Normal 14/30/40/55|Reefer 7/7/7/7|45HC-14'},{n:'CMA CGM',a:'CMA-CGM TZ','20GP':'10/15/30','40GP':'20/30/60','20RF':'120/120/120','40RF':'240/240/240','20OT':'30/30/30','40OT':'60/60/60','20FR':'30/30/30','40FR':'60/60/60',f:'Normal 14/30/40/55|Reefer 5/30/40/55'},{n:'MSC',a:'MSC Tanzania','20GP':'10/15/30','40GP':'20/30/60','20RF':'40/80/120','40RF':'80/16/240','20OT':'20/40/60','40OT':'40/80/120','20FR':'40/80/120','40FR':'40/80/120',f:'Normal 14/30/40/55|Reefer 14/21/21/21'},{n:'EVERGREEN',a:'Evergreen TZ','20GP':'10/15/30','40GP':'20/30/60','20RF':'20/75/75','40RF':'—','20OT':'—','40OT':'—','20FR':'—','40FR':'—',f:'Normal 14/30/40/55'},{n:'ONE',a:'WOSAC','20GP':'10/15/30','40GP':'20/30/60','20RF':'70/70/70','40RF':'40/125/125','20OT':'20/75/75','40OT':'40/125/125','20FR':'20/75/75','40FR':'40/125/125',f:'Normal 14/30/40/55|Reefer 14/25/25/35'},{n:'RCL',a:'African Shipping','20GP':'10/15/30','40GP':'20/30/60','20RF':'70/70/70','40RF':'140/140/140','20OT':'20/30/60','40OT':'40/60/120','20FR':'20/30/60','40FR':'40/60/120',f:'Normal 14/30/40/55|Reefer 7/14/14/14'},{n:'TS LINE',a:'Sharaf Shipping','20GP':'10/15/30','40GP':'20/30/60','20RF':'70/70/70','40RF':'140/140/140','20OT':'20/30/60','40OT':'40/60/120','20FR':'20/30/60','40FR':'40/60/120',f:'Normal 14/30/40/55|Reefer 7/14/14/14'}];
+const DFC=[{c:'赞比亚 Zambia',d:'40天',s:1},{c:'刚果金 DRC',d:'55天',s:0},{c:'卢旺达 Rwanda',d:'30天',s:1},{c:'马拉维 Malawi',d:'40天',s:1},{c:'乌干达 Uganda',d:'30天',s:1},{c:'布隆迪 Burundi',d:'30天',s:1}];
+const DTY=['20GP','40GP','20RF','40RF','20OT','40OT','20FR','40FR'];
+const VH=[{b:'解放',w:'8.8吨',f:'9.5吨'},{b:'徐工',w:'9.3吨',f:'9.9吨'}];
+const VT=[{t:'平板 Flatbed',l:'12米',w:'2.5米',h:'1.5米',wt:'7.5吨',wf:'8.3/8.5吨'},{t:'低板 Lowbed',l:'9.1/9.7米',w:'2.55米',h:'1.25米',wt:'10.2吨',wf:'无油箱'},{t:'宽低板 Wide Lowbed',l:'9.3/9.7米',w:'2.8米',h:'1.05米',wt:'10.7吨',wf:'无油箱'},{t:'抽拉板 Extendable',l:'11.7/15.8米',w:'2.8米',h:'1.1米',wt:'12.3吨',wf:'无油箱'}];
+const VCB=[{c:'车头+平板+满油',tw:'17.8/18吨',tl:'16米'},{c:'车头+低板+满油',tw:'19.5吨',tl:'17.5米'},{c:'车头+宽低板+满油',tw:'20.2吨',tl:'17.5米'},{c:'车头+抽拉板+满油',tw:'—',tl:'20.5-25.5米'}];
+const DEFD={zambia:['Lusaka','Kitwe','Ndola','Chingola','Chambishi','Mansa','Kabwe','Chililabobwe','Chirundu','Kasempa','Choma','Solwezi','Mumbwa','Chipata'],drc:['Lubumbashi','Kolwezi','Likasi','Kambove','Kamina','Kalemie','Mbuji-Mayi','Kindu','Bukavu','Goma','Kisangani'],malawi:['Lilongwe','Blantyre','Mzuzu','Zomba','Karonga','Kasungu','Liwonde','Mangochi','Salima','Nkhata Bay']};
+
+/* === BUILT-IN HISTORICAL DATA (2023-2026) === */
+const BUILTIN_PRICES={"zambia": {"Lusaka": {"2023-01": {"flatbed": "5400"}, "2023-02": {"flatbed": "5400"}, "2023-03": {"flatbed": "5400"}, "2023-04": {"flatbed": "5300"}, "2023-05": {"flatbed": "5000"}, "2023-06": {"flatbed": "4900"}, "2023-07": {"flatbed": "4800"}, "2023-08": {"flatbed": "4700"}, "2023-09": {"flatbed": "4700"}, "2023-10": {"flatbed": "4700"}, "2023-11": {"flatbed": "4700"}, "2023-12": {"flatbed": "4600"}, "2024-01": {"flatbed": "4400"}, "2024-02": {"flatbed": "4300"}, "2024-03": {"flatbed": "4200/135MT"}, "2024-04": {"flatbed": "4100/130MT"}, "2024-05": {"flatbed": "4100"}, "2024-06": {"flatbed": "4000"}, "2024-07": {"flatbed": "4000"}, "2024-08": {"flatbed": "4000"}, "2024-09": {"flatbed": "4000"}, "2024-10": {"flatbed": "4000"}, "2024-11": {"flatbed": "4000"}, "2024-12": {"flatbed": "4000"}, "2025-01": {"flatbed": "4000"}, "2025-02": {"flatbed": "4100"}, "2025-03": {"flatbed": "4000"}, "2025-04": {"flatbed": "4100"}, "2025-05": {"flatbed": "4100"}, "2025-06": {"flatbed": "4100"}, "2025-07": {"flatbed": "4100"}, "2025-08": {"flatbed": "4200"}, "2025-09": {"flatbed": "4200"}, "2025-10": {"flatbed": "4400"}, "2025-11": {"flatbed": "4500"}, "2025-12": {"flatbed": "4500"}, "2026-01": {"flatbed": "4700-4900"}, "2026-02": {"flatbed": "5200-5300"}, "2026-03": {"flatbed": "5400"}}}, "drc": {"Lubumbashi": {"2023-01": {"flatbed": "8400"}, "2023-02": {"flatbed": "8400"}, "2023-03": {"flatbed": "8400"}, "2023-04": {"flatbed": "8000"}, "2023-05": {"flatbed": "7800"}, "2023-06": {"flatbed": "7700"}, "2023-07": {"flatbed": "7400"}, "2023-08": {"flatbed": "7400"}, "2023-09": {"flatbed": "7400"}, "2023-10": {"flatbed": "7500"}, "2023-11": {"flatbed": "7500"}, "2023-12": {"flatbed": "7400"}, "2024-01": {"flatbed": "6700"}, "2024-02": {"flatbed": "6300"}, "2024-03": {"flatbed": "6200"}, "2024-04": {"flatbed": "6200"}, "2024-05": {"flatbed": "6200"}, "2024-06": {"flatbed": "5600"}, "2024-07": {"flatbed": "5600"}, "2024-08": {"flatbed": "5600"}, "2024-09": {"flatbed": "5800"}, "2024-10": {"flatbed": "5800"}, "2024-11": {"flatbed": "5800"}, "2024-12": {"flatbed": "5800"}, "2025-01": {"flatbed": "6000"}, "2025-02": {"flatbed": "6000"}, "2025-03": {"flatbed": "6200"}, "2025-04": {"flatbed": "6200"}, "2025-05": {"flatbed": "6200"}, "2025-06": {"flatbed": "6200"}, "2025-07": {"flatbed": "7000"}, "2025-08": {"flatbed": "7200"}, "2025-09": {"flatbed": "7200"}, "2025-10": {"flatbed": "8300"}, "2025-11": {"flatbed": "8300"}, "2025-12": {"flatbed": "8700"}, "2026-01": {"flatbed": "8900-9000"}, "2026-02": {"flatbed": "9000-9200"}, "2026-03": {"flatbed": "9000-9200"}}, "Likasi": {"2023-01": {"flatbed": "9600"}, "2023-02": {"flatbed": "9600"}, "2023-03": {"flatbed": "9600"}, "2023-04": {"flatbed": "9500"}, "2023-05": {"flatbed": "8700"}, "2023-06": {"flatbed": "8500"}, "2023-07": {"flatbed": "7900"}, "2023-08": {"flatbed": "7900"}, "2023-09": {"flatbed": "7900"}, "2023-10": {"flatbed": "8000"}, "2023-11": {"flatbed": "8000"}, "2023-12": {"flatbed": "7900"}, "2024-01": {"flatbed": "8000"}, "2024-02": {"flatbed": "6800"}, "2024-03": {"flatbed": "6800"}, "2024-04": {"flatbed": "6700"}, "2024-05": {"flatbed": "6700"}, "2024-06": {"flatbed": "6200"}, "2024-07": {"flatbed": "6200"}, "2024-08": {"flatbed": "6200"}, "2024-09": {"flatbed": "6400"}, "2024-10": {"flatbed": "6400"}, "2024-11": {"flatbed": "6400"}, "2024-12": {"flatbed": "6400"}, "2025-01": {"flatbed": "6600"}, "2025-02": {"flatbed": "6600"}, "2025-03": {"flatbed": "6700"}, "2025-04": {"flatbed": "6700"}, "2025-05": {"flatbed": "6800"}, "2025-06": {"flatbed": "6800"}, "2025-07": {"flatbed": "7800"}, "2025-08": {"flatbed": "8000"}, "2025-09": {"flatbed": "9000"}, "2025-10": {"flatbed": "9000"}, "2025-11": {"flatbed": "9000"}, "2025-12": {"flatbed": "9500-9800"}, "2026-01": {"flatbed": "9700-9900"}, "2026-02": {"flatbed": "9700-9900"}, "2026-03": {"flatbed": "10000"}}, "Kambove": {"2023-01": {"flatbed": "9900"}, "2023-02": {"flatbed": "9900"}, "2023-03": {"flatbed": "9900"}, "2023-04": {"flatbed": "9800"}, "2023-05": {"flatbed": "9200"}, "2023-06": {"flatbed": "8800"}, "2023-07": {"flatbed": "8100"}, "2023-08": {"flatbed": "8000"}, "2023-09": {"flatbed": "8000"}, "2023-10": {"flatbed": "8300"}, "2023-11": {"flatbed": "8400"}, "2023-12": {"flatbed": "8400"}, "2024-01": {"flatbed": "8200"}, "2024-02": {"flatbed": "7200-7300"}, "2024-03": {"flatbed": "7000"}, "2024-04": {"flatbed": "6900"}, "2024-05": {"flatbed": "6900"}, "2024-06": {"flatbed": "6400"}, "2024-07": {"flatbed": "6400"}, "2024-08": {"flatbed": "6400"}, "2024-09": {"flatbed": "6600"}, "2024-10": {"flatbed": "6600"}, "2024-11": {"flatbed": "6600"}, "2024-12": {"flatbed": "6700"}, "2025-01": {"flatbed": "7000"}, "2025-02": {"flatbed": "7000/400MT"}, "2025-03": {"flatbed": "7000"}, "2025-04": {"flatbed": "7300"}, "2025-05": {"flatbed": "7400"}, "2025-06": {"flatbed": "7500"}, "2025-07": {"flatbed": "7800"}, "2025-08": {"flatbed": "8000"}, "2025-09": {"flatbed": "9000"}, "2025-10": {"flatbed": "9000"}, "2025-11": {"flatbed": "9000"}, "2025-12": {"flatbed": "9500-9800"}, "2026-01": {"flatbed": "10000-10500"}, "2026-02": {"flatbed": "10500-11000"}, "2026-03": {"flatbed": "11000"}}, "Kolwezi": {"2023-01": {"flatbed": "10500"}, "2023-02": {"flatbed": "10500"}, "2023-03": {"flatbed": "10500"}, "2023-04": {"flatbed": "10200"}, "2023-05": {"flatbed": "9500"}, "2023-06": {"flatbed": "9200/280MT"}, "2023-07": {"flatbed": "8400"}, "2023-08": {"flatbed": "8400/300MT"}, "2023-09": {"flatbed": "8400"}, "2023-10": {"flatbed": "8800/285MT"}, "2023-11": {"flatbed": "8800/240MT"}, "2023-12": {"flatbed": "8800"}, "2024-01": {"flatbed": "8400"}, "2024-02": {"flatbed": "7400"}, "2024-03": {"flatbed": "7200"}, "2024-04": {"flatbed": "7000/160MT"}, "2024-05": {"flatbed": "6800"}, "2024-06": {"flatbed": "6800"}, "2024-07": {"flatbed": "6800"}, "2024-08": {"flatbed": "6800"}, "2024-09": {"flatbed": "7000"}, "2024-10": {"flatbed": "7000"}, "2024-11": {"flatbed": "7000/390MT"}, "2024-12": {"flatbed": "7200/395MT"}, "2025-01": {"flatbed": "7200/400MT"}, "2025-02": {"flatbed": "7200/410-420MT"}, "2025-03": {"flatbed": "7300"}, "2025-04": {"flatbed": "7500"}, "2025-05": {"flatbed": "7500"}, "2025-06": {"flatbed": "7700"}, "2025-07": {"flatbed": "7800"}, "2025-08": {"flatbed": "8000"}, "2025-09": {"flatbed": "9000"}, "2025-10": {"flatbed": "9000"}, "2025-11": {"flatbed": "9000"}, "2025-12": {"flatbed": "9500-9800/470-480MT"}, "2026-01": {"flatbed": "10000-10500/500MT"}, "2026-02": {"flatbed": "10500-11000/500MT"}, "2026-03": {"flatbed": "11000"}}}, "malawi": {"Lilongwe": {"2023-04": {"flatbed": "4200"}, "2023-05": {"flatbed": "4000"}, "2023-06": {"flatbed": "4000"}, "2023-11": {"flatbed": "3800"}, "2023-12": {"flatbed": "3000"}, "2024-08": {"flatbed": "3800"}, "2024-09": {"flatbed": "3800"}, "2024-10": {"flatbed": "3900"}, "2024-11": {"flatbed": "3900/130MT"}, "2024-12": {"flatbed": "3900/130MT"}, "2025-01": {"flatbed": "3800"}, "2025-02": {"flatbed": "3800"}, "2025-03": {"flatbed": "3900"}, "2025-04": {"flatbed": "3900"}, "2025-05": {"flatbed": "4000"}, "2025-06": {"flatbed": "4000"}, "2025-07": {"flatbed": "4000"}, "2025-08": {"flatbed": "3900"}, "2025-09": {"flatbed": "4000"}, "2025-10": {"flatbed": "4050"}, "2025-11": {"flatbed": "4200"}, "2025-12": {"flatbed": "4200"}, "2026-01": {"flatbed": "4400"}, "2026-02": {"flatbed": "4500"}, "2026-03": {"flatbed": "4500"}}}};
+
+/* === STATE + LOCALSTORAGE === */
+const SK='wakawaka_cloud_v1';
+function defS(){return{tab:'quote',co:'zambia',mo:'2026-03',ds:JSON.parse(JSON.stringify(DEFD)),pr:JSON.parse(JSON.stringify(BUILTIN_PRICES)),tg:'',nt:'',recs:[],nid:1,rexp:null,rflt:'all',rcn:'',rdci:'',rcg:'',rdel:null,aL:'',aW:'',aH:'',aR:null,dt:'40GP',dsr:'',tsel:null};}
+
+function mergeDeep(target,src){
+  for(const k in src){
+    if(src[k]&&typeof src[k]==='object'&&!Array.isArray(src[k])){
+      if(!target[k])target[k]={};
+      mergeDeep(target[k],src[k]);
+    } else if(src[k]!==undefined&&src[k]!==null&&src[k]!==''){
+      target[k]=src[k];
+    }
+  }
+}
+
+function loadS(){
+  const d=defS();
+  try{
+    const raw=localStorage.getItem(SK);
+    if(raw){
+      const saved=JSON.parse(raw);
+      // Merge saved prices ON TOP of built-in (user edits override, but built-in fills gaps)
+      if(saved.pr){mergeDeep(d.pr, saved.pr);}
+      // Restore other fields
+      if(saved.tab)d.tab=saved.tab;
+      if(saved.co)d.co=saved.co;
+      if(saved.mo)d.mo=saved.mo;
+      if(saved.ds)d.ds=saved.ds;
+      if(saved.tg)d.tg=saved.tg;
+      if(saved.nt)d.nt=saved.nt;
+      if(saved.recs)d.recs=saved.recs;
+      if(saved.nid)d.nid=saved.nid;
+      if(saved.dt)d.dt=saved.dt;
+    }
+  }catch(e){}
+  return d;
+}
+function saveS(){try{const sv={...S};delete sv.aR;delete sv.rexp;delete sv.rflt;delete sv.rdel;localStorage.setItem(SK,JSON.stringify(sv));showT('✅ 已自动保存');}catch(e){}}
+let stm=null;function autoS(){clearTimeout(stm);stm=setTimeout(saveS,800);}
+let ttm=null;function showT(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(ttm);ttm=setTimeout(()=>t.classList.remove('show'),1800);}
+
+let S=loadS();
+const $=id=>document.getElementById(id);
+const E=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const gp=(d,m,f)=>S.pr?.[S.co]?.[d]?.[m]?.[f]??'';
+function sp(d,m,f,v){if(!S.pr[S.co])S.pr[S.co]={};if(!S.pr[S.co][d])S.pr[S.co][d]={};if(!S.pr[S.co][d][m])S.pr[S.co][d][m]={};S.pr[S.co][d][m][f]=v;autoS();}
+const td=()=>new Date().toISOString().slice(0,10);
+const bg=(t,c,b)=>'<span class="ba" style="background:'+(b||c+'16')+';color:'+c+'">'+t+'</span>';
+
+function render(){const nv=$('nv');nv.innerHTML=TB.map(t=>'<button class="'+(S.tab===t.id?'on':'')+'" onclick="S.tab=\''+t.id+'\';render()">'+t.l+'</button>').join('');document.querySelectorAll('.tc').forEach(e=>e.classList.remove('on'));$('t-'+S.tab).classList.add('on');({quote:rQ,record:rR,trend:rT,abnormal:rA,detention:rD,vehicle:rV})[S.tab]();}
+
+/* === QUOTE === */
+function rQ(){
+  const el=$('t-quote'),c=S.co,m=S.mo,ds=S.ds[c]||[],cl=CS.find(x=>x.id===c)?.l||'',tv=parseFloat(S.tg)||0;
+  let h='<div class="st">📊 报价总览 Quotation Overview</div>';
+  h+='<div class="cd"><div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px"><div><div class="lb">选择国家</div><div style="display:flex;gap:5px;flex-wrap:wrap">'+CS.map(x=>'<button class="pl '+(c===x.id?'on':'')+'" onclick="S.co=\''+x.id+'\';autoS();render()">'+x.l+'</button>').join('')+'</div></div><div><div class="lb">基准月份</div><select class="sl" onchange="S.mo=this.value;autoS();render()">'+MS.map(x=>'<option '+(m===x?'selected':'')+'>'+x+'</option>').join('')+'</select></div></div>';
+  h+='<div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end"><div style="min-width:170"><div class="lb">📌 Tanga港加价 (USD)</div><input class="ip" style="max-width:150px" value="'+E(S.tg)+'" placeholder="加价金额" oninput="S.tg=this.value;autoS();rQ()"></div><div style="flex:1;min-width:220"><div class="lb">📝 特殊备注</div><input class="ip" value="'+E(S.nt)+'" placeholder="手动填写备注..." oninput="S.nt=this.value;autoS()"></div></div></div>';
+  h+='<div class="g g4" style="margin-bottom:14px">'+[{v:ds.length,l:'目的地',c:'var(--pri)'},{v:m,l:'基准月份',c:'var(--pu)'},{v:'USD',l:'货币',c:'var(--cy)'},{v:S.nt||'—',l:'备注',c:'var(--am)',s:1}].map(s=>'<div class="cd sc" style="margin-bottom:0"><div class="sv" style="color:'+s.c+';font-size:'+(s.s?'12px':'22px')+'">'+E(String(s.v))+'</div><div class="sl2">'+s.l+'</div></div>').join('')+'</div>';
+  h+='<div class="cd"><div class="ct" style="color:var(--pri)">🗺️ '+cl+' — 从 DSM 出发 ('+m+')</div><div class="sx" style="max-height:520px"><table><thead><tr><th style="width:30px"></th><th>目的地</th><th>车队平板价</th><th>低板价格</th><th style="background:#ecfdf5">已报出</th><th style="background:#fffbeb">建议报价</th><th>备注</th></tr></thead><tbody>';
+  ds.forEach((d,i)=>{const de=E(d).replace(/'/g,"\'");h+='<tr style="background:'+(i%2?'#fafafd':'#fff')+'"><td style="text-align:center"><button class="db" onclick="S.ds[S.co].splice('+i+',1);autoS();rQ()" title="删除">×</button></td><td style="font-weight:600">'+E(d)+'</td>';
+  ['flatbed','lowbed'].forEach(f=>{h+='<td><input class="ip" style="width:110px" value="'+E(gp(d,m,f))+'" placeholder="—" oninput="sp(\''+de+'\',\''+m+'\',\''+f+'\',this.value)"></td>';});
+  h+='<td><input class="ip ig" style="width:110px" value="'+E(gp(d,m,'quoteIssued'))+'" placeholder="—" oninput="sp(\''+de+'\',\''+m+'\',\'quoteIssued\',this.value)"></td>';
+  h+='<td><input class="ip iy" style="width:110px" value="'+E(gp(d,m,'quoteSuggested'))+'" placeholder="—" oninput="sp(\''+de+'\',\''+m+'\',\'quoteSuggested\',this.value)"></td>';
+  h+='<td><input class="ip" style="width:140px" value="'+E(gp(d,m,'remarks'))+'" placeholder="备注" oninput="sp(\''+de+'\',\''+m+'\',\'remarks\',this.value)"></td></tr>';});
+  h+='</tbody></table></div><div style="display:flex;gap:8px;align-items:center;margin-top:10px"><input id="ndi" class="ip" style="width:200px" placeholder="输入新目的地..." onkeydown="if(event.key===\'Enter\')aD()"><button class="bt bg" onclick="aD()">＋ 添加目的地</button></div></div>';
+  if(tv>0){h+='<div class="cd"><div class="ct" style="color:var(--pu)">🗺️ '+cl+' — 从 Tanga 出发 ('+m+') '+bg('DSM + $'+tv,'var(--pu)','var(--puB)')+'</div><div class="sx"><table><thead><tr><th>目的地</th><th>平板价</th><th>低板价格</th><th style="background:#ecfdf5">已报出</th><th style="background:#fffbeb">建议报价</th></tr></thead><tbody>';
+  ds.forEach((d,i)=>{const fb=parseFloat(gp(d,m,'flatbed')),lb=parseFloat(gp(d,m,'lowbed')),qi=parseFloat(gp(d,m,'quoteIssued')),qs=parseFloat(gp(d,m,'quoteSuggested'));
+  h+='<tr style="background:'+(i%2?'#fafafd':'#fff')+'"><td style="font-weight:600">'+E(d)+'</td><td style="color:var(--pu);font-weight:600">'+(fb?'$'+(fb+tv).toLocaleString():'—')+'</td><td style="color:var(--pu);font-weight:600">'+(lb?'$'+(lb+tv).toLocaleString():'—')+'</td><td style="color:var(--gn);font-weight:600">'+(qi?'$'+(qi+tv).toLocaleString():'—')+'</td><td style="color:var(--am);font-weight:600">'+(qs?'$'+(qs+tv).toLocaleString():'—')+'</td></tr>';});
+  h+='</tbody></table></div></div>';}
+  h+='<div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="bt bp bs" onclick="saveS()">💾 手动保存</button><button class="bt bg bs" style="color:var(--rd);border-color:var(--rd)" onclick="if(window.confirm(\'确认清除所有本地数据？将恢复为内置默认数据。\')){localStorage.removeItem(SK);S=defS();render();showT(\'已恢复默认数据\');}">🗑 清除本地数据</button></div>';
+  el.innerHTML=h;
+}
+function aD(){const i=$('ndi'),n=i.value.trim();if(!n)return;S.ds[S.co].push(n);i.value='';autoS();rQ();}
+
+/* === RECORD === */
+function rR(){
+  const el=$('t-record'),rs=S.recs,ft=S.rflt;
+  // Apply all filters: status + client name + dest city
+  const fl=rs.filter(r=>{
+    if(ft!=='all'&&r.status!==ft)return false;
+    if(S.rcn&&!((r.cn||'').toLowerCase().includes(S.rcn.toLowerCase())))return false;
+    if(S.rdci&&!((r.dci||'').toLowerCase().includes(S.rdci.toLowerCase())))return false;
+    if(S.rcg&&!((r.cg||'').toLowerCase().includes(S.rcg.toLowerCase())))return false;
+    return true;
+  });
+  const tot=rs.length,won=rs.filter(r=>r.status==='won').length,lost=rs.filter(r=>r.status==='lost').length,act=rs.filter(r=>['submitted','negotiating'].includes(r.status)).length;
+  let h='<div class="st">📋 报价记录 Quotation Records</div>';
+  h+='<div class="g g5" style="margin-bottom:14px">'+[{v:tot,l:'总报价',c:'var(--pri)'},{v:act,l:'进行中',c:'var(--am)'},{v:won,l:'已成交',c:'var(--gn)'},{v:lost,l:'未成交',c:'var(--rd)'},{v:tot?Math.round(won/tot*100)+'%':'—',l:'成交率',c:'var(--pu)'}].map(s=>'<div class="cd sc" style="margin-bottom:0"><div class="sv" style="color:'+s.c+'">'+s.v+'</div><div class="sl2">'+s.l+'</div></div>').join('')+'</div>';
+  h+='<div class="cd" style="padding:14px">';
+  h+='<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px">';
+  h+='<button class="bt bp" onclick="aRec()">＋ 新增报价记录</button>';
+  h+='<div style="display:flex;gap:4px;flex-wrap:wrap"><button class="pl '+(ft==='all'?'on':'')+'" onclick="S.rflt=\'all\';rR()">全部</button>'+STS.map(s=>'<button class="pl '+(ft===s.v?'on':'')+'" onclick="S.rflt=\''+s.v+'\';rR()">'+s.l.split(' ')[0]+'</button>').join('')+'</div>';
+  h+='</div>';
+  h+='<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">';
+  h+='<div style="flex:1;min-width:150px;max-width:220px"><div class="lb">🔍 客户名称</div><input id="frcn" class="ip" value="'+E(S.rcn)+'" placeholder="输入客户名称..." oninput="S.rcn=this.value" onchange="rR()"></div>';
+  h+='<div style="flex:1;min-width:150px;max-width:220px"><div class="lb">🏙️ 目的城市</div><input id="frdci" class="ip" value="'+E(S.rdci)+'" placeholder="输入目的城市..." oninput="S.rdci=this.value" onchange="rR()"></div>';
+  h+='<div style="flex:1;min-width:150px;max-width:220px"><div class="lb">📦 货物信息</div><input id="frcg" class="ip" value="'+E(S.rcg)+'" placeholder="输入货物信息..." oninput="S.rcg=this.value" onchange="rR()"></div>';
+  h+='<button class="bt bg bs" onclick="S.rcn=\'\';S.rdci=\'\';S.rcg=\'\';S.rflt=\'all\';rR()" style="white-space:nowrap">✕ 清除</button>';
+  h+='</div></div>';
+  if(!fl.length){h+='<div class="cd" style="text-align:center;padding:50px"><div style="font-size:44px;margin-bottom:8px">📋</div><div style="font-size:15px;font-weight:600;color:var(--sc)">'+(rs.length?'该筛选下无记录':'暂无报价记录')+'</div></div>';}
+  else fl.forEach(rec=>{
+    const ri=rs.indexOf(rec),io=S.rexp===ri,st=STS.find(s=>s.v===rec.status)||STS[0],lr=rec.rounds[rec.rounds.length-1];
+    h+='<div class="cd" style="border-left:4px solid '+st.c+';padding:0"><div class="rh" onclick="S.rexp=S.rexp==='+ri+'?null:'+ri+';S.rdel=null;rR()"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="font-weight:700;color:var(--pri)">'+rec.id+'</span><span style="font-weight:600">'+E(rec.cn||'未填写客户')+'</span>'+(rec.dc?bg(rec.dc+(rec.dci?' → '+rec.dci:''),'var(--pu)','var(--puB)'):'')+bg(st.l,st.c,st.c+'14')+'</div><div style="display:flex;align-items:center;gap:10px">'+(lr?.q?'<span style="font-weight:700;color:var(--gn)">$ '+E(lr.q)+'</span>':'')+'<span style="font-size:11px;color:var(--mu)">'+rec.cr+'</span><span style="display:inline-block;transition:transform .2s;transform:rotate('+(io?180:0)+'deg);font-size:14px;color:var(--sc)">▼</span></div></div>';
+    if(io){h+='<div class="rb" onclick="event.stopPropagation()">';
+    h+='<div class="rs">📌 基础信息</div><div class="g g3" style="margin-bottom:12px">';
+    [{l:'客户名称',f:'cn',p:'客户名称'},{l:'客户编号',f:'cc',p:'编号'},{l:'是否我司客户',f:'io',t:'s',o:['是','否']},{l:'询价途径',f:'ic',t:'s',o:IC},{l:'询价关键词 <span style="color:var(--mu);font-weight:400">微信填关键词/邮件填标题</span>',f:'ik',p:'关键词'},{l:'负责人 PIC',f:'pi',p:'负责人'}].forEach(x=>{
+      if(x.t==='s')h+='<div><div class="lb">'+x.l+'</div><select class="sl" style="width:100%" onchange="uR('+ri+',\''+x.f+'\',this.value)">'+x.o.map(o=>'<option '+(rec[x.f]===o?'selected':'')+'>'+o+'</option>').join('')+'</select></div>';
+      else h+='<div><div class="lb">'+x.l+'</div><input class="ip" value="'+E(rec[x.f]||'')+'" placeholder="'+(x.p||'')+'" oninput="uR('+ri+',\''+x.f+'\',this.value)"></div>';});
+    h+='</div>';
+    h+='<div class="rs">📌 报价信息</div><div class="g g3" style="margin-bottom:12px">';
+    [{l:'提单号 B/L',f:'bl',p:'如有'},{l:'客户业务号',f:'bn',p:'如有'},{l:'目的国',f:'dc',p:'如 Zambia'},{l:'目的城市',f:'dci',p:'如 Lusaka'}].forEach(x=>{h+='<div><div class="lb">'+x.l+'</div><input class="ip" value="'+E(rec[x.f]||'')+'" placeholder="'+x.p+'" oninput="uR('+ri+',\''+x.f+'\',this.value)"></div>';});
+    h+='<div style="grid-column:1/-1"><div class="lb">货物信息</div><textarea class="ta" rows="2" placeholder="品名、尺寸、重量等" oninput="uR('+ri+',\'cg\',this.value)">'+E(rec.cg||'')+'</textarea></div></div>';
+    h+='<div class="rs">📌 多轮报价</div><div class="sx"><table><thead><tr><th>轮次</th><th>报价(USD)</th><th>成本(USD)</th><th>利润</th><th>日期</th><th>说明</th><th style="width:36px"></th></tr></thead><tbody>';
+    rec.rounds.forEach((rd,rdi)=>{const mg=(parseFloat(rd.q)||0)-(parseFloat(rd.c)||0),hv=rd.q&&rd.c;
+    h+='<tr style="background:'+(rdi%2?'#fafafd':'#fff')+'"><td style="font-weight:700;color:var(--pri)">R'+rd.r+'</td><td><input class="ip ig" style="width:110px" value="'+E(rd.q)+'" placeholder="报价金额" oninput="uRd('+ri+','+rdi+',\'q\',this.value)"></td><td><input class="ip" style="width:110px" value="'+E(rd.c)+'" placeholder="成本金额" oninput="uRd('+ri+','+rdi+',\'c\',this.value)"></td><td style="font-weight:600;color:'+(hv?(mg>0?'var(--gn)':mg<0?'var(--rd)':'var(--mu)'):'var(--mu)')+'">'+( hv?'$'+mg.toLocaleString():'—')+'</td><td><input type="date" class="ip" style="width:135px" value="'+rd.d+'" oninput="uRd('+ri+','+rdi+',\'d\',this.value)"></td><td><input class="ip" style="width:160px" value="'+E(rd.n)+'" placeholder="调整说明" oninput="uRd('+ri+','+rdi+',\'n\',this.value)"></td><td style="text-align:center">'+(rec.rounds.length>1?'<button class="db" onclick="dRnd('+ri+','+rdi+')" title="删除">×</button>':'')+'</td></tr>';});
+    h+='</tbody></table></div><button class="bt bg bs" style="margin-top:8px" onclick="aRnd('+ri+')">＋ 追加轮次</button>';
+    h+='<div class="rs">📌 状态与成交</div><div class="g g3"><div><div class="lb">状态</div><select class="sl" style="width:100%" onchange="uR('+ri+',\'status\',this.value);autoS();rR()">'+STS.map(s=>'<option value="'+s.v+'" '+(rec.status===s.v?'selected':'')+'>'+s.l+'</option>').join('')+'</select></div>';
+    if(rec.status==='won')h+='<div style="padding:12px;background:var(--gnB);border-radius:8px;display:flex;align-items:center;gap:8px"><span style="font-size:22px">🎉</span><span style="font-weight:600;color:var(--gn)">恭喜成交！</span></div>';
+    if(rec.status==='lost')h+='<div><div class="lb">丢单原因</div><select class="sl" style="width:100%" onchange="uR('+ri+',\'lr\',this.value)"><option value="">请选择</option>'+LR.map(r=>'<option '+(rec.lr===r?'selected':'')+'>'+r+'</option>').join('')+'</select></div>';
+    h+='</div>';
+    h+='<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--bdL);display:flex;justify-content:flex-end;gap:8px">';
+    if(S.rdel===ri)h+='<span style="font-size:13px;color:var(--rd);font-weight:600;line-height:32px">确认删除？</span><button class="bt bd bs" onclick="S.recs.splice('+ri+',1);S.rexp=null;S.rdel=null;autoS();rR()">确认</button><button class="bt bg bs" onclick="S.rdel=null;rR()">取消</button>';
+    else h+='<button class="bt bg bs" style="color:var(--rd);border-color:var(--rd)" onclick="S.rdel='+ri+';rR()">🗑 删除</button>';
+    h+='</div></div>';}h+='</div>';});
+  el.innerHTML=h;
+}
+function aRec(){S.recs.unshift({id:'WakaQ-'+S.nid,cn:'',cc:'',io:'否',ic:'微信',ik:'',bl:'',bn:'',dc:'',dci:'',cg:'',pi:'',status:'draft',lr:'',rounds:[{r:1,q:'',c:'',d:td(),n:''}],cr:td()});S.nid++;S.rexp=0;autoS();rR();}
+function uR(i,f,v){S.recs[i][f]=v;autoS();}
+function aRnd(i){const r=S.recs[i];r.rounds.push({r:r.rounds.length+1,q:'',c:'',d:td(),n:''});autoS();rR();}
+function uRd(i,j,f,v){S.recs[i].rounds[j][f]=v;autoS();}
+function dRnd(ri,rdi){if(S.recs[ri].rounds.length<=1)return;S.recs[ri].rounds.splice(rdi,1);S.recs[ri].rounds.forEach((rd,i)=>rd.r=i+1);autoS();rR();}
+
+/* === TREND (auto-shows data) === */
+let tch=[];
+function rT(){
+  tch.forEach(c=>c.destroy());tch=[];
+  const el=$('t-trend'),c=S.co,cd=S.pr[c]||{},ds=S.ds[c]||[];
+  // Find destinations that have ANY price data
+  const dw=ds.filter(d=>{const dd=cd[d];if(!dd)return false;return Object.values(dd).some(m=>m&&(m.flatbed||m.lowbed||m.quoteIssued||m.quoteSuggested));});
+  let h='<div class="st">📈 趋势分析 Trend Analysis</div><div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px">'+CS.map(x=>'<button class="pl '+(c===x.id?'on':'')+'" onclick="S.co=\''+x.id+'\';S.tsel=null;rT()">'+x.l+'</button>').join('')+'</div>';
+  if(!dw.length){h+='<div class="cd" style="text-align:center;padding:50px"><div style="font-size:44px;margin-bottom:8px">📝</div><div style="font-size:15px;font-weight:600;color:var(--sc)">暂无趋势数据</div></div>';el.innerHTML=h;return;}
+  h+='<div class="cd"><div class="lb" style="margin-bottom:8px">选择目的地查看详细趋势（共 '+dw.length+' 个有数据）</div><div style="display:flex;gap:5px;flex-wrap:wrap">'+dw.map(d=>'<button class="pl '+(S.tsel===d?'on':'')+'" onclick="S.tsel=S.tsel===\''+E(d)+'\'?null:\''+E(d)+'\';rT()">'+E(d)+'</button>').join('')+'</div></div>';
+  if(S.tsel&&dw.includes(S.tsel))h+='<div class="cd"><div class="ct" style="color:var(--pri)">📍 '+E(S.tsel)+' — 月度趋势</div><div class="ch"><canvas id="cS"></canvas></div></div>';
+  h+='<div class="cd"><div class="ct">🗺️ 全部目的地车队价走势</div><div class="ch"><canvas id="cO"></canvas></div></div>';
+  h+='<div class="st" style="margin-top:12px">📊 各目的地独立趋势</div><div class="g g2">'+dw.map((d,i)=>'<div class="cd" style="margin-bottom:0"><div class="ct" style="color:'+CC[i%CC.length]+'">📍 '+E(d)+'</div><div class="ch chs"><canvas id="cM'+i+'"></canvas></div></div>').join('')+'</div>';
+  el.innerHTML=h;
+
+  // Helper: extract first number from string like "5400", "4200/135MT", "7200-7300"
+  function num(v){if(!v)return null;const m=String(v).match(/[\d.]+/);return m?parseFloat(m[0]):null;}
+
+  // All months including 2023
+  const allM=[];for(let y=2023;y<=2027;y++)for(let m=1;m<=12;m++)allM.push(y+'-'+String(m).padStart(2,'0'));
+  const co={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:12},usePointStyle:true}}},scales:{x:{grid:{display:false},ticks:{maxRotation:45,font:{size:10}}},y:{grid:{color:'#eef0f5'}}}};
+  const cos={...co,plugins:{legend:{labels:{font:{size:10},usePointStyle:true}}}};
+
+  setTimeout(()=>{
+    // Selected dest detail chart
+    if(S.tsel&&dw.includes(S.tsel)){
+      const dt=allM.map(m=>{const p=cd[S.tsel]?.[m];return{m:m.slice(2),fb:p?num(p.flatbed):null,lb:p?num(p.lowbed):null,qi:p?num(p.quoteIssued):null,qs:p?num(p.quoteSuggested):null}}).filter(d=>d.fb||d.lb||d.qi||d.qs);
+      if(dt.length){const x=$('cS')?.getContext('2d');if(x)tch.push(new Chart(x,{type:'line',data:{labels:dt.map(d=>d.m),datasets:[{label:'平板车队价',data:dt.map(d=>d.fb),borderColor:'#2d5be3',borderWidth:2.5,pointRadius:3,tension:.3,spanGaps:true},{label:'低板价格',data:dt.map(d=>d.lb),borderColor:'#7446d6',borderWidth:2.5,pointRadius:3,tension:.3,spanGaps:true},{label:'客户已报价',data:dt.map(d=>d.qi),borderColor:'#12a466',borderWidth:2,borderDash:[6,3],pointRadius:2,tension:.3,spanGaps:true},{label:'建议报价',data:dt.map(d=>d.qs),borderColor:'#cf8a00',borderWidth:2,borderDash:[6,3],pointRadius:2,tension:.3,spanGaps:true}]},options:co}));}
+    }
+    // Overview: all dests fleet price
+    const om={};dw.forEach(d=>{allM.forEach(m=>{const p=cd[d]?.[m];const v=p?num(p.flatbed):null;if(v){if(!om[d])om[d]=[];om[d].push({m:m.slice(2),v})}})});
+    const am=[...new Set(Object.values(om).flat().map(x=>x.m))];
+    if(am.length){const x=$('cO')?.getContext('2d');if(x)tch.push(new Chart(x,{type:'line',data:{labels:am,datasets:dw.filter(d=>om[d]).map((d,i)=>({label:d,data:am.map(m=>{const f=om[d]?.find(x=>x.m===m);return f?f.v:null}),borderColor:CC[i%CC.length],borderWidth:2,pointRadius:2,tension:.3,spanGaps:true}))},options:co}));}
+    // Mini charts
+    dw.forEach((d,i)=>{const dt=allM.map(m=>{const p=cd[d]?.[m];return{m:m.slice(2),v:p?num(p.flatbed):null,q:p?(num(p.quoteIssued)||num(p.quoteSuggested)):null}}).filter(x=>x.v||x.q);if(!dt.length)return;const x=$('cM'+i)?.getContext('2d');if(x)tch.push(new Chart(x,{type:'line',data:{labels:dt.map(x=>x.m),datasets:[{label:'车队价',data:dt.map(x=>x.v),borderColor:CC[i%CC.length],borderWidth:2,pointRadius:2,tension:.3,spanGaps:true},{label:'报价',data:dt.map(x=>x.q),borderColor:'#12a466',borderWidth:1.5,borderDash:[4,2],pointRadius:1,tension:.3,spanGaps:true}]},options:cos}));});
+  },80);
+}
+
+/* === ABNORMAL === */
+function ckAbn(L,W,H){
+  const rk=v=>{if(v.includes('正常'))return 0;if(v.includes('PERMIT'))return 1;if(v.includes('2E')&&v.includes('MOT'))return 7;if(v.includes('2E')&&v.includes('路勘'))return 6;if(v.includes('2E')&&v.includes('POL'))return 5;if(v.includes('2E'))return 4;if(v.includes('1E')&&v.includes('POL'))return 3;if(v.includes('1E'))return 2;return 1};
+  return[{ct:'TANZANIA 🇹🇿',hL:4.6,wR:[{x:2.65,v:'✅ 正常'},{x:2.89,v:'PERMIT ONLY'},{x:3.24,v:'1E'},{x:3.74,v:'2E'},{x:4.74,v:'2E+2POL+报纸'},{x:1e9,v:'2E+2POL+报纸+路勘'}],lR:[{n:17.4,x:22,v:'PERMIT ONLY'}],p:'10',e:'450/台',po:'150kTZS×6天'},{ct:'ZAMBIA 🇿🇲',hL:4.6,wR:[{x:2.65,v:'✅ 正常'},{x:3,v:'PERMIT ONLY'},{x:3.3,v:'1E'},{x:4,v:'2E'},{x:5,v:'2E+1POL'},{x:1e9,v:'2E+1POL+RDA路勘'}],lR:[{n:17.4,x:22,v:'PERMIT ONLY'},{n:22,x:28,v:'1E'},{n:28,x:1e9,v:'2E'}],p:'150',e:'600/台',po:'150USD×4天'},{ct:'DRC 🇨🇩',hL:4.6,wR:[{x:2.65,v:'✅ 正常'},{x:1e9,v:'1E'}],lR:[{n:17.4,x:1e9,v:'1E'}],p:'140',e:'300/台',po:'—',nt:'设备类必须1台押运'},{ct:'KENYA 🇰🇪',hL:4.2,wR:[{x:2.65,v:'✅ 正常'},{x:3,v:'PERMIT ONLY'},{x:4,v:'1E'},{x:1e9,v:'1E+1POL+公告'}],lR:[{n:17.4,x:22,v:'PERMIT ONLY'}],p:'TZ10+NBI180',e:'NMG400+NBI300',po:'—'},{ct:'ZIMBABWE 🇿🇼',hL:4.6,wR:[{x:2.65,v:'✅ 正常'},{x:3,v:'PERMIT ONLY'},{x:3.3,v:'1E'},{x:3.7,v:'2E'},{x:6,v:'2E+2POL'},{x:1e9,v:'2E+2MOT+2POL'}],lR:[{n:18.5,x:30,v:'PERMIT ONLY'},{n:30,x:1e9,v:'1E+1POL'}],p:'310',e:'≤500(2/km)',po:'—'},{ct:'MALAWI 🇲🇼',hL:4.6,wR:[{x:2.6,v:'✅ 正常'},{x:2.9,v:'PERMIT ONLY'},{x:3.2,v:'1E'},{x:1e9,v:'2E+2POL+报纸+路勘'}],lR:[{n:18.5,x:1e9,v:'PERMIT ONLY'}],p:'TZ10+MW300',e:'—',po:'—'},{ct:'RWANDA 🇷🇼',hL:1e9,wR:[{x:1e9,v:'✅ 正常'}],lR:[],nt:'无超限限制'}].map(r=>{
+    let wL='✅ 正常',lL='✅ 正常',dt=[];for(const w of r.wR){if(W<w.x){wL=w.v;break;}}for(const l of r.lR){if(L>=l.n&&L<l.x){lL=l.v;break;}}
+    if(r.hL<1e9&&H>=r.hL)dt.push('高度'+H+'m≥'+r.hL+'m');if(wL!=='✅ 正常')dt.push('宽'+W+'m→'+wL);if(lL!=='✅ 正常')dt.push('长'+L+'m→'+lL);if(r.nt)dt.push(r.nt);
+    const fn=rk(wL)>=rk(lL)?wL:lL;return{country:r.ct,status:fn,details:dt.join(' | ')||'无超限',escorts:fn.includes('2E')?2:fn.includes('1E')?1:0,permit:r.p,escort:r.e,police:r.po};
+  });
+}
+function rA(){
+  const el=$('t-abnormal');let h='<div class="st">🚛 超限货物自动判断</div>';
+  h+='<div class="cd hl"><div class="ct" style="color:var(--pri)">📐 输入货物尺寸</div><div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">';
+  [['长度 L (m)','aL','17.5'],['宽度 W (m)','aW','3.5'],['高度 H (m)','aH','3.2']].forEach(([l,f,p])=>{h+='<div><div class="lb">'+l+'</div><input class="ip" style="width:120px;background:#fff" value="'+E(S[f])+'" placeholder="'+p+'" oninput="S.'+f+'=this.value" onkeydown="if(event.key===\'Enter\')doAbn()"></div>';});
+  h+='<button class="bt bp" onclick="doAbn()">🔍 判断</button></div></div>';
+  if(S.aR){h+='<div class="cd"><div class="ct">📋 结果 — '+E(S.aL)+'×'+E(S.aW)+'×'+E(S.aH)+'m</div><div class="g g6">';
+  S.aR.forEach(r=>{const ok=r.status.includes('正常'),pm=r.status.includes('PERMIT'),cl=ok?'var(--gn)':pm?'var(--am)':'var(--rd)',b=ok?'var(--gnB)':pm?'var(--amB)':'var(--rdB)';
+  h+='<div class="ar" style="border-color:'+cl+'30;background:'+b+'"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-weight:700">'+E(r.country)+'</span>'+bg(r.status,cl,cl+'18')+'</div>';
+  if(r.details)h+='<div style="font-size:12px;color:var(--sc);line-height:1.6">'+E(r.details)+'</div>';
+  if(r.escorts>0)h+='<div style="margin-top:6px;font-size:12px;color:var(--sc)"><b>许可:</b>'+E(r.permit)+' | <b>押运×'+r.escorts+':</b>'+E(r.escort)+(r.police!=='—'?' | <b>警察:</b>'+E(r.police):'')+'</div>';
+  h+='</div>';});h+='</div></div>';}
+  h+='<div class="cd"><div class="ct">📖 超限标准速查</div><div class="sx"><table><thead><tr><th>国家</th><th>Permit Only</th><th>1 Escort</th><th>2 Escort</th><th>+Police/路勘</th></tr></thead><tbody>';
+  [{c:'🇹🇿 TZ',p:'17.4≤L<22\n2.65≤W≤2.89\nH≥4.6',e1:'2.9≤W≤3.24',e2:'3.25≤W≤3.74',ep:'W≥3.75(+Pol)\nW≥4.75(+路勘)'},{c:'🇿🇲 ZM',p:'17.4≤L<22\n2.65≤W≤3\nH≥4.6',e1:'22<L≤28\n3<W≤3.3',e2:'L>28\n3.3<W≤4',ep:'4<W≤5(+Pol)\nW≥5(+RDA)'},{c:'🇨🇩 DRC',p:'—',e1:'L≥17.4/W≥2.65\n设备必须1台',e2:'—',ep:'—'},{c:'🇰🇪 KE',p:'17.4≤L<22\n2.65≤W<3\nH≥4.2',e1:'3≤W<4',e2:'—',ep:'W≥4(+Pol)'},{c:'🇿🇼 ZW',p:'18.5≤L≤30\n2.65≤W≤3',e1:'3<W≤3.3/H≥5',e2:'L>30/3.3<W≤3.7',ep:'3.7<W≤6\nW>6(+MOT)'},{c:'🇲🇼 MW',p:'H:4.6 W:2.6\nL:18.5',e1:'2.9<W≤3.2',e2:'—',ep:'W>3.2'},{c:'🇷🇼 RW',p:'无限制',e1:'—',e2:'—',ep:'—'}].forEach((r,i)=>{h+='<tr style="background:'+(i%2?'#fafafd':'#fff')+'"><td style="font-weight:700">'+r.c+'</td>'+[r.p,r.e1,r.e2,r.ep].map(v=>'<td style="white-space:pre-line;line-height:1.5;font-size:12px">'+v+'</td>').join('')+'</tr>';});
+  h+='</tbody></table></div></div>';el.innerHTML=h;
+}
+function doAbn(){const L=parseFloat(S.aL)||0,W=parseFloat(S.aW)||0,H=parseFloat(S.aH)||0;if(!L&&!W&&!H)return;S.aR=ckAbn(L,W,H);rA();}
+
+/* === DETENTION === */
+function rD(){
+  const el=$('t-detention'),bt=S.dt,sr=S.dsr.toLowerCase(),fl=DL.filter(l=>l.n.toLowerCase().includes(sr)||l.a.toLowerCase().includes(sr));
+  let h='<div class="st">📦 滞箱费 & 免箱期 — DAR</div><div class="g g5" style="margin-bottom:14px">'+DFC.map(c=>'<div class="cd" style="padding:12px;margin-bottom:0;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600">'+c.c+'</div><div style="font-size:10px;color:var(--mu)">Free Time</div></div><div style="font-size:18px;font-weight:700;color:'+(c.s?'var(--gn)':'var(--rd)')+'">'+c.d+'</div></div>').join('')+'</div>';
+  h+='<div class="cd" style="padding:14px"><div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end"><div><div class="lb">箱型</div><div style="display:flex;gap:3px;flex-wrap:wrap">'+DTY.map(t=>'<button class="pl '+(bt===t?'on':'')+'" onclick="S.dt=\''+t+'\';rD()">'+t+'</button>').join('')+'</div></div><div style="flex:1;min-width:160px;max-width:260px"><div class="lb">🔍 搜索船公司</div><input class="ip" value="'+E(S.dsr)+'" placeholder="输入船公司..." oninput="S.dsr=this.value;rD()"></div></div></div>';
+  h+='<div class="cd"><div class="ct" style="color:var(--pri)">💲 '+bt+' 滞箱费 (USD/天)</div><div class="sx"><table><thead><tr><th>船公司</th><th>代理</th><th>滞箱费</th><th>免箱期</th></tr></thead><tbody>';
+  fl.forEach((l,i)=>{const r=l[bt]||'—';h+='<tr style="background:'+(i%2?'#fafafd':'#fff')+'"><td style="font-weight:700">'+l.n+'</td><td style="font-size:11px;color:var(--sc)">'+l.a+'</td><td>'+(r!=='—'?r.split('/').map((v,j)=>bg('$'+v,j===0?'var(--gn)':j===1?'var(--am)':'var(--rd)',j===0?'var(--gnB)':j===1?'var(--amB)':'var(--rdB)')).join(' '):'<span style="color:var(--mu)">—</span>')+'</td><td style="font-size:11px;color:var(--sc);max-width:240px;white-space:normal;line-height:1.5">'+l.f.replace(/\|/g,' | ')+'</td></tr>';});
+  if(!fl.length)h+='<tr><td colspan="4" style="text-align:center;color:var(--mu);padding:30px">未找到</td></tr>';
+  h+='</tbody></table></div></div>';el.innerHTML=h;
+}
+
+/* === VEHICLE === */
+function rV(){
+  const el=$('t-vehicle');
+  let h='<div class="st">🚚 车辆规格</div><div class="g g2">';
+  h+='<div class="cd"><div class="ct" style="color:var(--pri)">🏗️ 车头</div><table><thead><tr><th>品牌</th><th>重量</th><th>含油箱</th></tr></thead><tbody>'+VH.map((x,i)=>'<tr style="background:'+(i%2?'#fafafd':'#fff')+'"><td style="font-weight:600">'+x.b+'</td><td>'+x.w+'</td><td>'+x.f+'</td></tr>').join('')+'</tbody></table></div>';
+  h+='<div class="cd"><div class="ct" style="color:var(--pu)">📐 组合</div><table><thead><tr><th>组合</th><th>总重</th><th>总长</th></tr></thead><tbody>'+VCB.map((x,i)=>'<tr style="background:'+(i%2?'#fafafd':'#fff')+'"><td style="font-weight:600">'+x.c+'</td><td style="color:var(--pri);font-weight:600">'+x.tw+'</td><td>'+x.tl+'</td></tr>').join('')+'</tbody></table></div></div>';
+  h+='<div class="cd"><div class="ct">🚛 车板</div><div class="sx"><table><thead><tr><th>类型</th><th>长度</th><th>宽度</th><th>高度</th><th>重量</th><th>含油箱</th></tr></thead><tbody>'+VT.map((x,i)=>'<tr style="background:'+(i%2?'#fafafd':'#fff')+'"><td style="font-weight:600">'+x.t+'</td><td>'+x.l+'</td><td>'+x.w+'</td><td>'+x.h+'</td><td>'+x.wt+'</td><td>'+x.wf+'</td></tr>').join('')+'</tbody></table></div></div>';
+  el.innerHTML=h;
+}
+
+
+/* ═══════════════════════════════════════════
+   SUPABASE CLOUD SYNC
+   ═══════════════════════════════════════════ */
+const CFG_SK='waka_cfg_v1';
+let dbUrl='',dbKey='',cloudMode=false;
+
+function loadCfg(){
+  try{
+    const c=JSON.parse(localStorage.getItem(CFG_SK)||'{}');
+    dbUrl=c.url||'';dbKey=c.key||'';cloudMode=!!(dbUrl&&dbKey);
+  }catch(e){}
+}
+
+function doConnect(){
+  const url=document.getElementById('cfgUrl').value.trim();
+  const key=document.getElementById('cfgKey').value.trim();
+  const err=document.getElementById('cfgErr');
+  if(!url||!key){err.style.display='block';err.textContent='请填写完整的URL和Key';return;}
+  localStorage.setItem(CFG_SK,JSON.stringify({url,key}));
+  dbUrl=url;dbKey=key;cloudMode=true;
+  document.getElementById('setupOv').style.display='none';
+  setSyncBar('connecting');
+  pullFromCloud();
+}
+
+function skipSetup(){
+  cloudMode=false;
+  document.getElementById('setupOv').style.display='none';
+  setSyncBar('local');
+}
+
+function setSyncBar(s){
+  const dot=document.getElementById('syncDot'),txt=document.getElementById('syncTxt');
+  if(s==='ok'){dot.style.background='var(--gn)';txt.textContent='☁️ 云端已连接 — 数据多人共享';}
+  else if(s==='syncing'){dot.style.background='var(--am)';txt.textContent='🔄 同步中...';}
+  else if(s==='err'){dot.style.background='var(--rd)';txt.textContent='⚠️ 同步失败 — 使用本地缓存';}
+  else if(s==='local'){dot.style.background='var(--mu)';txt.textContent='💾 本地模式 — 数据仅存此浏览器';}
+  else if(s==='connecting'){dot.style.background='var(--am)';txt.textContent='🔌 连接中...';}
+}
+
+async function dbReq(table,method,body,extra){
+  if(!cloudMode)return null;
+  const base=dbUrl+'/rest/v1/'+table;
+  const url=method==='GET'?(base+'?select=*'+(extra||'')):base;
+  // Supabase upsert: POST with both resolution headers separated by comma
+  const headers={'apikey':dbKey,'Authorization':'Bearer '+dbKey,'Content-Type':'application/json'};
+  if(method==='POST'){
+    headers['Prefer']='resolution=merge-duplicates';
+  }
+  const opts={method,headers};
+  if(body)opts.body=JSON.stringify(body);
+  const res=await fetch(url,opts);
+  if(!res.ok){
+    const errText=await res.text().catch(()=>'');
+    throw new Error(res.status+' '+res.statusText+' '+errText);
+  }
+  if(method==='GET')return res.json();
+  return true;
+}
+
+let syncTimer=null;
+function autoSync(){clearTimeout(syncTimer);syncTimer=setTimeout(syncNow,3000);}
+
+async function dbUpsert(table, rows){
+  if(!rows||!rows.length)return;
+  const url=dbUrl+'/rest/v1/'+table;
+  const res=await fetch(url,{
+    method:'POST',
+    headers:{
+      'apikey':dbKey,
+      'Authorization':'Bearer '+dbKey,
+      'Content-Type':'application/json',
+      'Prefer':'resolution=merge-duplicates,return=minimal'
+    },
+    body:JSON.stringify(rows)
+  });
+  if(!res.ok){
+    const txt=await res.text().catch(()=>'');
+    throw new Error(table+' upsert '+res.status+': '+txt.slice(0,100));
+  }
+  return true;
+}
+
+async function syncNow(){
+  if(!cloudMode){setSyncBar('local');return;}
+  setSyncBar('syncing');
+  try{
+    // Only push user-modified prices (skip builtin historical data)
+    const rows=[];
+    for(const co in S.pr)for(const d in S.pr[co])for(const m in S.pr[co][d]){
+      const p=S.pr[co][d][m];
+      const bi=BUILTIN_PRICES?.[co]?.[d]?.[m];
+      const changed=p.lowbed||p.quoteIssued||p.quoteSuggested||p.remarks||(p.flatbed&&(!bi||p.flatbed!==bi.flatbed));
+      if(changed)rows.push({country:co,destination:d,month:m,flatbed:p.flatbed||null,lowbed:p.lowbed||null,quote_issued:p.quoteIssued||null,quote_suggested:p.quoteSuggested||null,remarks:p.remarks||null});
+    }
+    if(rows.length){
+      for(let i=0;i<rows.length;i+=20)await dbUpsert('prices',rows.slice(i,i+20));
+    }
+    // Push records
+    for(const r of S.recs)await dbUpsert('records',[{id:r.id,data:r}]);
+    // Push settings
+    await dbUpsert('settings',[{key:'destinations',value:S.ds},{key:'meta',value:{tg:S.tg,nt:S.nt,nid:S.nid}}]);
+    setSyncBar('ok');
+    showT('☁️ 已同步到云端');
+  }catch(e){
+    console.error('SyncNow error:',e);
+    setSyncBar('err');
+    showT('⚠️ 同步失败: '+(e.message||'').slice(0,50));
+  }
+}
+
+async function pullFromCloud(){
+  if(!cloudMode)return;
+  setSyncBar('syncing');
+  try{
+    // Pull prices
+    const prices=await dbReq('prices','GET');
+    if(prices?.length){
+      prices.forEach(r=>{
+        if(!S.pr[r.country])S.pr[r.country]={};
+        if(!S.pr[r.country][r.destination])S.pr[r.country][r.destination]={};
+        const obj={};
+        if(r.flatbed)obj.flatbed=r.flatbed;
+        if(r.lowbed)obj.lowbed=r.lowbed;
+        if(r.quote_issued)obj.quoteIssued=r.quote_issued;
+        if(r.quote_suggested)obj.quoteSuggested=r.quote_suggested;
+        if(r.remarks)obj.remarks=r.remarks;
+        if(Object.keys(obj).length)S.pr[r.country][r.destination][r.month]=obj;
+      });
+    }
+    // Pull records
+    const recs=await dbReq('records','GET');
+    if(recs?.length){
+      const map={};
+      S.recs.forEach(r=>map[r.id]=r);
+      recs.forEach(r=>{if(r.data&&r.data.id)map[r.data.id]=r.data;});
+      S.recs=Object.values(map).sort((a,b)=>a.cr<b.cr?1:-1);
+    }
+    // Pull settings
+    const sets=await dbReq('settings','GET');
+    if(sets?.length){
+      sets.forEach(s=>{
+        if(s.key==='destinations'&&s.value)S.ds=s.value;
+        if(s.key==='meta'&&s.value){
+          if(s.value.tg)S.tg=s.value.tg;
+          if(s.value.nt)S.nt=s.value.nt;
+          if(s.value.nid&&s.value.nid>S.nid)S.nid=s.value.nid;
+        }
+      });
+    }
+    setSyncBar('ok');
+    saveS();
+    render();
+    showT('☁️ 云端数据已加载');
+  }catch(e){
+    console.error('Pull error:',e);
+    setSyncBar('err');
+    render();
+  }
+}
+
+// Override autoS to also trigger cloud sync
+const _origAutoS = autoS;
+window._cloudAutoS = function(){ _origAutoS(); if(cloudMode)autoSync(); }
+
+/* ═══ INIT ═══ */
+loadCfg();
+if(!localStorage.getItem(CFG_SK)){
+  // First time — show setup
+  document.getElementById('setupOv').style.display='flex';
+  setSyncBar('local');
+} else if(cloudMode){
+  setSyncBar('connecting');
+  pullFromCloud();
+} else {
+  setSyncBar('local');
+}
+
+render();
+</script>
+
+<!-- Supabase config info panel -->
+<div id="sbi" class="supabase-info">
+  <div class="sbi-title">☁️ Supabase 云端配置信息</div>
+  <div class="lb" style="margin-bottom:4px">Project URL</div>
+  <div class="sbi-row">
+    <div class="sbi-val" title="https://ggdbmsykmxrovoldabsi.supabase.co">https://ggdbmsykmxrovoldabsi.supabase.co</div>
+    <button class="sbi-copy" onclick="navigator.clipboard.writeText('https://ggdbmsykmxrovoldabsi.supabase.co');showT('✅ URL 已复制')">复制</button>
+  </div>
+  <div class="lb" style="margin-bottom:4px;margin-top:6px">Anon Public Key</div>
+  <div class="sbi-row">
+    <div class="sbi-val" title="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnZGJtc3lrbXhyb3ZvbGRhYnNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2ODM5NTgsImV4cCI6MjA5MjI1OTk1OH0.m322GQJegt35lLIt09mweliefkEFiyQd4YX1xgSgn9s">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ...</div>
+    <button class="sbi-copy" onclick="navigator.clipboard.writeText('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnZGJtc3lrbXhyb3ZvbGRhYnNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2ODM5NTgsImV4cCI6MjA5MjI1OTk1OH0.m322GQJegt35lLIt09mweliefkEFiyQd4YX1xgSgn9s');showT('✅ Key 已复制')">复制</button>
+  </div>
+  <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--bdL);font-size:11px;color:var(--mu)">此信息仅供配置云端版使用</div>
+  <button onclick="document.getElementById('sbi').classList.remove('show')" style="position:absolute;top:10px;right:12px;background:none;border:none;cursor:pointer;font-size:16px;color:var(--mu)">×</button>
+</div>
+<button onclick="document.getElementById('sbi').classList.toggle('show')" style="position:fixed;bottom:20px;left:20px;background:var(--pri);color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(45,91,227,.3);z-index:899">☁️ Supabase 配置</button>
+
+</body>
+</html>
