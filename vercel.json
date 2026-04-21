@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/WAKAWAKA_报价系统_Sylvia.html" }
+  ]
+}
